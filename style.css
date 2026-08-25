@@ -16,8 +16,13 @@ body {
 }
 
 
+/* =========================
+   CONTAINER
+========================= */
+
 .container {
     width: 92%;
+
     max-width: 1200px;
 
     margin: auto;
@@ -32,25 +37,22 @@ body {
     background: linear-gradient(
         135deg,
         #8fd3ff,
-        #dff3ff
+        #e0f4ff
     );
 
     padding: 45px 0;
+
+    text-align: center;
 
     box-shadow:
         0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
 
-.brand {
-    text-align: center;
-}
-
-
-.brand h1 {
-    font-size: 42px;
-
+.header h1 {
     color: #075985;
+
+    font-size: 42px;
 
     font-weight: 800;
 
@@ -58,7 +60,7 @@ body {
 }
 
 
-.brand p {
+.header p {
     color: #3b82b6;
 
     font-size: 16px;
@@ -76,15 +78,16 @@ body {
 
 .search-box {
     display: flex;
+
     align-items: center;
 
     background: white;
 
+    border: 1px solid #dbeafe;
+
     border-radius: 14px;
 
     padding: 0 18px;
-
-    border: 1px solid #dbeafe;
 
     box-shadow:
         0 5px 20px rgba(14, 165, 233, 0.08);
@@ -105,11 +108,11 @@ body {
 
     outline: none;
 
+    background: transparent;
+
     padding: 17px 0;
 
     font-size: 16px;
-
-    background: transparent;
 }
 
 
@@ -118,21 +121,20 @@ body {
 ========================= */
 
 .filter-section {
-    background: white;
-
-    margin-top: 20px;
-
-    padding: 20px;
-
-    border-radius: 14px;
-
     display: grid;
 
     grid-template-columns:
-        repeat(4, 1fr)
-        auto;
+        repeat(4, 1fr) auto;
 
     gap: 15px;
+
+    background: white;
+
+    padding: 20px;
+
+    margin-top: 20px;
+
+    border-radius: 14px;
 
     box-shadow:
         0 5px 20px rgba(14, 165, 233, 0.06);
@@ -151,9 +153,9 @@ body {
 .filter-item label {
     font-size: 13px;
 
-    color: #64748b;
-
     font-weight: 600;
+
+    color: #64748b;
 }
 
 
@@ -161,17 +163,17 @@ body {
 .filter-item select {
     height: 42px;
 
+    padding: 0 10px;
+
     border: 1px solid #dbeafe;
 
     border-radius: 8px;
 
-    padding: 0 10px;
-
     outline: none;
 
-    font-size: 14px;
-
     background: white;
+
+    font-size: 14px;
 }
 
 
@@ -214,11 +216,11 @@ body {
 ========================= */
 
 .result-info {
-    margin-top: 25px;
-
     display: flex;
 
     justify-content: space-between;
+
+    margin-top: 25px;
 
     color: #64748b;
 
@@ -261,11 +263,11 @@ body {
 .product-card {
     background: white;
 
+    border: 1px solid #e0f2fe;
+
     border-radius: 15px;
 
     padding: 20px;
-
-    border: 1px solid #e0f2fe;
 
     box-shadow:
         0 5px 20px rgba(14, 165, 233, 0.06);
@@ -284,20 +286,13 @@ body {
 }
 
 
-/* ID */
-
-.product-id {
-    font-size: 11px;
-
-    color: #94a3b8;
-
-    margin-bottom: 8px;
-}
-
-
-/* PRODUCT NAME */
+/* =========================
+   PRODUCT NAME
+========================= */
 
 .product-name {
+    display: block;
+
     color: #0369a1;
 
     font-size: 18px;
@@ -307,8 +302,6 @@ body {
     line-height: 1.4;
 
     text-decoration: none;
-
-    display: block;
 
     margin-bottom: 14px;
 }
@@ -321,14 +314,16 @@ body {
 }
 
 
-/* META */
+/* =========================
+   BADGES
+========================= */
 
 .product-meta {
     display: flex;
 
-    gap: 8px;
-
     flex-wrap: wrap;
+
+    gap: 8px;
 
     margin-bottom: 16px;
 }
@@ -354,21 +349,23 @@ body {
 }
 
 
-/* PRICE */
+/* =========================
+   PRICE
+========================= */
 
 .price-area {
-    border-top: 1px solid #f1f5f9;
-
     padding-top: 14px;
+
+    border-top: 1px solid #f1f5f9;
 }
 
 
 .old-price {
     color: #94a3b8;
 
-    text-decoration: line-through;
-
     font-size: 13px;
+
+    text-decoration: line-through;
 
     margin-bottom: 4px;
 }
@@ -403,7 +400,7 @@ body {
 
 
 /* =========================
-   EMPTY
+   EMPTY STATE
 ========================= */
 
 .empty-state {
@@ -441,11 +438,11 @@ body {
 .footer {
     text-align: center;
 
-    padding: 30px 20px;
-
     background: white;
 
     border-top: 1px solid #e0f2fe;
+
+    padding: 30px 20px;
 
     color: #64748b;
 
@@ -463,7 +460,7 @@ body {
 
 
 /* =========================
-   RESPONSIVE
+   TABLET
 ========================= */
 
 @media (max-width: 900px) {
@@ -482,14 +479,23 @@ body {
 }
 
 
+/* =========================
+   MOBILE
+========================= */
+
 @media (max-width: 600px) {
 
-    .brand h1 {
+    .header {
+        padding: 35px 0;
+    }
+
+
+    .header h1 {
         font-size: 32px;
     }
 
 
-    .brand p {
+    .header p {
         font-size: 14px;
     }
 
@@ -507,7 +513,22 @@ body {
     .result-info {
         flex-direction: column;
 
-        gap: 5px;
+        gap: 6px;
+    }
+
+
+    .product-card {
+        padding: 18px;
+    }
+
+
+    .product-name {
+        font-size: 17px;
+    }
+
+
+    .new-price {
+        font-size: 22px;
     }
 
 }
