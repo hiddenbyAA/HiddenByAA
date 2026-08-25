@@ -417,7 +417,7 @@ function createProductCard(product) {
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                Click Here to Buy
+                Click Link Product
             </a>
 
         </div>
