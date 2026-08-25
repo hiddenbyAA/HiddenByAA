@@ -183,6 +183,10 @@ body {
 }
 
 
+/* =========================
+   RESET BUTTON
+========================= */
+
 .reset-button {
     align-self: end;
 
@@ -301,21 +305,12 @@ body {
 
     line-height: 1.4;
 
-    text-decoration: none;
-
     margin-bottom: 14px;
 }
 
 
-.product-name:hover {
-    color: #0284c7;
-
-    text-decoration: underline;
-}
-
-
 /* =========================
-   BADGES
+   PRODUCT META
 ========================= */
 
 .product-meta {
@@ -396,6 +391,44 @@ body {
     font-size: 12px;
 
     font-weight: 700;
+}
+
+
+/* =========================
+   BUY BUTTON
+========================= */
+
+.buy-button {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 16px;
+
+    padding: 12px 15px;
+
+    background: #38bdf8;
+
+    color: white;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    transition: 0.2s;
+}
+
+
+.buy-button:hover {
+    background: #0284c7;
+
+    transform: translateY(-1px);
 }
 
 
