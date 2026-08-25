@@ -49,7 +49,7 @@ const loadingText =
 
 
 // ==========================================
-// LOAD PRODUCTS FROM GOOGLE SHEETS
+// LOAD PRODUCTS
 // ==========================================
 
 async function loadProducts() {
@@ -369,14 +369,9 @@ function createProductCard(product) {
 
     card.innerHTML = `
 
-        <a
-            class="product-name"
-            href="${safeURL(product.shopee)}"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
+        <div class="product-name">
             ${escapeHTML(product.name)}
-        </a>
+        </div>
 
 
         <div class="product-meta">
@@ -384,6 +379,7 @@ function createProductCard(product) {
             <span class="badge">
                 ${escapeHTML(product.category)}
             </span>
+
 
             <span class="badge badge-time">
                 🕐 ${escapeHTML(product.time)}
@@ -413,6 +409,16 @@ function createProductCard(product) {
                 `
                 : ""
             }
+
+
+            <a
+                class="buy-button"
+                href="${safeURL(product.shopee)}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Click Here to Buy
+            </a>
 
         </div>
 
@@ -481,10 +487,15 @@ function formatRupiah(value) {
 function escapeHTML(value) {
 
     return String(value)
+
         .replace(/&/g, "&amp;")
+
         .replace(/</g, "&lt;")
+
         .replace(/>/g, "&gt;")
+
         .replace(/"/g, "&quot;")
+
         .replace(/'/g, "&#039;");
 
 }
@@ -583,7 +594,7 @@ resetFilter.addEventListener(
 
 
 // ==========================================
-// START WEBSITE
+// START
 // ==========================================
 
 loadProducts();
