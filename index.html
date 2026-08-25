@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +17,11 @@
 
         <div class="container">
 
-            <div class="brand">
-                <h1>Hidden by AA</h1>
-            </div>
+            <h1>Hidden by AA</h1>
+
+            <p>
+                Temukan barang yang diam-diam turun harga 🔥
+            </p>
 
         </div>
 
@@ -38,7 +41,8 @@
                 <input
                     type="text"
                     id="searchInput"
-                    placeholder="Cari barang..."
+                    placeholder="Cari nama barang..."
+                    autocomplete="off"
                 >
 
             </div>
@@ -93,6 +97,7 @@
                     type="number"
                     id="minPrice"
                     placeholder="Rp 0"
+                    min="0"
                 >
 
             </div>
@@ -108,46 +113,58 @@
                     type="number"
                     id="maxPrice"
                     placeholder="Rp 10.000.000"
+                    min="0"
                 >
 
             </div>
 
 
-            <button id="resetFilter" class="reset-button">
+            <button
+                id="resetFilter"
+                class="reset-button"
+            >
                 Reset Filter
             </button>
 
         </section>
 
 
-        <!-- INFO -->
+        <!-- RESULT INFO -->
         <section class="result-info">
 
-            <div>
+            <span>
                 <strong id="productCount">0</strong>
                 produk ditemukan
-            </div>
+            </span>
 
-            <div id="loadingText">
+            <span id="loadingText">
                 Memuat produk...
-            </div>
+            </span>
 
         </section>
 
 
-        <!-- PRODUCTS -->
-        <section id="productContainer" class="product-grid">
+        <!-- PRODUCT LIST -->
+        <section
+            id="productContainer"
+            class="product-grid"
+        >
         </section>
 
 
-        <!-- EMPTY STATE -->
-        <section id="emptyState" class="empty-state">
+        <!-- EMPTY -->
+        <section
+            id="emptyState"
+            class="empty-state"
+        >
 
             <div class="empty-icon">
                 🔍
             </div>
 
-            <h2>Produk tidak ditemukan</h2>
+            <h2>
+                Produk tidak ditemukan
+            </h2>
 
             <p>
                 Coba gunakan kata kunci atau filter yang berbeda.
@@ -175,4 +192,5 @@
     <script src="script.js"></script>
 
 </body>
+
 </html>
