@@ -2,7 +2,8 @@
 // GOOGLE APPS SCRIPT API
 // ==========================================
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzZftAsnQmS6El2y4YAr0_4-ZzuflJP743luDtb6zTMEN9MLBhmROpPbD-53YtPdcAZ/exec";
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbzZftAsnQmS6El2y4YAr0_4-ZzuflJP743luDtb6zTMEN9MLBhmROpPbD-53YtPdcAZ/exec";
 
 
 // ==========================================
@@ -124,11 +125,17 @@ async function loadProducts() {
 function createCategoryFilter() {
 
     const categories =
-        [...new Set(
-            products
-                .map(product => product.category)
-                .filter(category => category)
-        )];
+        [
+            ...new Set(
+                products
+                    .map(product =>
+                        product.category
+                    )
+                    .filter(category =>
+                        category
+                    )
+            )
+        ];
 
 
     categories.sort();
@@ -147,12 +154,17 @@ function createCategoryFilter() {
             document.createElement("option");
 
 
-        option.value = category;
+        option.value =
+            category;
 
-        option.textContent = category;
+
+        option.textContent =
+            category;
 
 
-        categoryFilter.appendChild(option);
+        categoryFilter.appendChild(
+            option
+        );
 
     });
 
@@ -166,11 +178,17 @@ function createCategoryFilter() {
 function createTimeFilter() {
 
     const times =
-        [...new Set(
-            products
-                .map(product => product.time)
-                .filter(time => time)
-        )];
+        [
+            ...new Set(
+                products
+                    .map(product =>
+                        product.time
+                    )
+                    .filter(time =>
+                        time
+                    )
+            )
+        ];
 
 
     times.sort();
@@ -189,12 +207,17 @@ function createTimeFilter() {
             document.createElement("option");
 
 
-        option.value = time;
+        option.value =
+            time;
 
-        option.textContent = time;
+
+        option.textContent =
+            time;
 
 
-        timeFilter.appendChild(option);
+        timeFilter.appendChild(
+            option
+        );
 
     });
 
@@ -226,7 +249,8 @@ function filterProducts() {
 
 
     const maximum =
-        Number(maxPrice.value) || Infinity;
+        Number(maxPrice.value) ||
+        Infinity;
 
 
     const filtered =
@@ -301,7 +325,9 @@ function renderProducts(data) {
             createProductCard(product);
 
 
-        productContainer.appendChild(card);
+        productContainer.appendChild(
+            card
+        );
 
     });
 
@@ -320,6 +346,19 @@ function createProductCard(product) {
 
     card.className =
         "product-card";
+
+
+    const discount =
+        calculateDiscount(
+            product.oldPrice,
+            product.newPrice
+        );
+
+
+    const oldPrice =
+        formatRupiah(
+            product.oldPrice
+        );
 
 
     const newPrice =
@@ -355,9 +394,25 @@ function createProductCard(product) {
 
         <div class="price-area">
 
+            <div class="old-price">
+                ${oldPrice}
+            </div>
+
+
             <div class="new-price">
                 ${newPrice}
             </div>
+
+
+            ${
+                discount > 0
+                ? `
+                    <span class="discount">
+                        Turun ${discount}%
+                    </span>
+                `
+                : ""
+            }
 
         </div>
 
@@ -365,6 +420,38 @@ function createProductCard(product) {
 
 
     return card;
+
+}
+
+
+// ==========================================
+// CALCULATE DISCOUNT
+// ==========================================
+
+function calculateDiscount(
+    oldPrice,
+    newPrice
+) {
+
+    if (
+        !oldPrice ||
+        oldPrice <= 0 ||
+        newPrice >= oldPrice
+    ) {
+
+        return 0;
+
+    }
+
+
+    const result =
+        (
+            (oldPrice - newPrice) /
+            oldPrice
+        ) * 100;
+
+
+    return Math.round(result);
 
 }
 
