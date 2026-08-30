@@ -367,58 +367,75 @@ function createProductCard(product) {
         );
 
 
+    const imageURL =
+        safeImageURL(product.image);
+
+
     card.innerHTML = `
 
-        <div class="product-name">
-            ${escapeHTML(product.name)}
-        </div>
+        <img
+            class="product-image"
+            src="${imageURL}"
+            alt="${escapeHTML(product.name)}"
+            loading="lazy"
+            onerror="this.src='https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image'"
+        >
 
 
-        <div class="product-meta">
+        <div class="product-content">
 
-            <span class="badge">
-                ${escapeHTML(product.category)}
-            </span>
-
-
-            <span class="badge badge-time">
-                🕐 ${escapeHTML(product.time)}
-            </span>
-
-        </div>
-
-
-        <div class="price-area">
-
-            <div class="old-price">
-                ${oldPrice}
+            <div class="product-name">
+                ${escapeHTML(product.name)}
             </div>
 
 
-            <div class="new-price">
-                ${newPrice}
+            <div class="product-meta">
+
+                <span class="badge">
+                    ${escapeHTML(product.category)}
+                </span>
+
+
+                <span class="badge badge-time">
+                    🕐 ${escapeHTML(product.time)}
+                </span>
+
             </div>
 
 
-            ${
-                discount > 0
-                ? `
-                    <span class="discount">
-                        Turun ${discount}%
-                    </span>
-                `
-                : ""
-            }
+            <div class="price-area">
+
+                <div class="old-price">
+                    ${oldPrice}
+                </div>
 
 
-            <a
-                class="buy-button"
-                href="${safeURL(product.shopee)}"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Click Link Product
-            </a>
+                <div class="new-price">
+                    ${newPrice}
+                </div>
+
+
+                ${
+                    discount > 0
+                    ? `
+                        <span class="discount">
+                            Turun ${discount}%
+                        </span>
+                    `
+                    : ""
+                }
+
+
+                <a
+                    class="buy-button"
+                    href="${safeURL(product.shopee)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Click Link Product
+                </a>
+
+            </div>
 
         </div>
 
@@ -426,6 +443,46 @@ function createProductCard(product) {
 
 
     return card;
+
+}
+
+
+// ==========================================
+// SAFE IMAGE URL
+// ==========================================
+
+function safeImageURL(url) {
+
+    if (!url) {
+
+        return "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
+
+    }
+
+
+    try {
+
+        const parsed =
+            new URL(url);
+
+
+        if (
+            parsed.protocol === "https:" ||
+            parsed.protocol === "http:"
+        ) {
+
+            return parsed.href;
+
+        }
+
+
+        return "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
+
+    } catch {
+
+        return "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
+
+    }
 
 }
 
