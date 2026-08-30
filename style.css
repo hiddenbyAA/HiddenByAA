@@ -540,10 +540,17 @@ body {
 
 @media (max-width: 600px) {
 
+    .product-image {
+        height: 250px;
+    }
+
+    .product-content {
+        padding: 18px;
+    }
+    
     .header {
         padding: 35px 0;
     }
-
 
     .header h1 {
         font-size: 32px;
