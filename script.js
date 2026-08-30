@@ -124,18 +124,17 @@ async function loadProducts() {
 
 function createCategoryFilter() {
 
-    const categories =
-        [
-            ...new Set(
-                products
-                    .map(product =>
-                        product.category
-                    )
-                    .filter(category =>
-                        category
-                    )
-            )
-        ];
+    const categories = [
+        ...new Set(
+            products
+                .map(product =>
+                    product.category
+                )
+                .filter(category =>
+                    category
+                )
+        )
+    ];
 
 
     categories.sort();
@@ -151,7 +150,9 @@ function createCategoryFilter() {
     categories.forEach(category => {
 
         const option =
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
 
         option.value =
@@ -177,18 +178,17 @@ function createCategoryFilter() {
 
 function createTimeFilter() {
 
-    const times =
-        [
-            ...new Set(
-                products
-                    .map(product =>
-                        product.time
-                    )
-                    .filter(time =>
-                        time
-                    )
-            )
-        ];
+    const times = [
+        ...new Set(
+            products
+                .map(product =>
+                    product.time
+                )
+                .filter(time =>
+                    time
+                )
+        )
+    ];
 
 
     times.sort();
@@ -204,7 +204,9 @@ function createTimeFilter() {
     times.forEach(time => {
 
         const option =
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
 
         option.value =
@@ -257,7 +259,7 @@ function filterProducts() {
         products.filter(product => {
 
             const matchesSearch =
-                product.name
+                String(product.name)
                     .toLowerCase()
                     .includes(keyword);
 
@@ -300,7 +302,6 @@ function renderProducts(data) {
 
     productContainer.innerHTML = "";
 
-
     productCount.textContent =
         data.length;
 
@@ -341,7 +342,9 @@ function renderProducts(data) {
 function createProductCard(product) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
 
 
     card.className =
@@ -368,7 +371,9 @@ function createProductCard(product) {
 
 
     const imageURL =
-        safeImageURL(product.image);
+        safeImageURL(
+            product.image
+        );
 
 
     card.innerHTML = `
@@ -378,7 +383,6 @@ function createProductCard(product) {
             src="${imageURL}"
             alt="${escapeHTML(product.name)}"
             loading="lazy"
-            onerror="this.src='https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image'"
         >
 
 
@@ -442,6 +446,30 @@ function createProductCard(product) {
     `;
 
 
+    // ==================================
+    // IMAGE ERROR
+    // ==================================
+
+    const image =
+        card.querySelector(
+            ".product-image"
+        );
+
+
+    image.addEventListener(
+        "error",
+        function () {
+
+            this.src =
+                "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
+
+        },
+        {
+            once: true
+        }
+    );
+
+
     return card;
 
 }
@@ -455,7 +483,9 @@ function safeImageURL(url) {
 
     if (!url) {
 
-        return "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
+        return (
+            "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image"
+        );
 
     }
 
@@ -476,11 +506,15 @@ function safeImageURL(url) {
         }
 
 
-        return "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
+        return (
+            "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image"
+        );
 
     } catch {
 
-        return "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
+        return (
+            "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image"
+        );
 
     }
 
@@ -545,15 +579,30 @@ function escapeHTML(value) {
 
     return String(value)
 
-        .replace(/&/g, "&amp;")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
 
-        .replace(/</g, "&lt;")
+        .replace(
+            /</g,
+            "&lt;"
+        )
 
-        .replace(/>/g, "&gt;")
+        .replace(
+            />/g,
+            "&gt;"
+        )
 
-        .replace(/"/g, "&quot;")
+        .replace(
+            /"/g,
+            "&quot;"
+        )
 
-        .replace(/'/g, "&#039;");
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
