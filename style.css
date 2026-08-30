@@ -16,6 +16,10 @@ body {
 }
 
 
+/* =========================
+   CONTAINER
+========================= */
+
 .container {
     width: 92%;
 
@@ -267,7 +271,7 @@ body {
 
     border-radius: 15px;
 
-    overflow: hidden;
+    padding: 20px;
 
     box-shadow:
         0 5px 20px rgba(14, 165, 233, 0.06);
@@ -283,32 +287,6 @@ body {
 
     box-shadow:
         0 10px 30px rgba(14, 165, 233, 0.13);
-}
-
-
-/* =========================
-   PRODUCT IMAGE
-========================= */
-
-.product-image {
-    width: 100%;
-
-    height: 230px;
-
-    display: block;
-
-    object-fit: cover;
-
-    background: #f0f9ff;
-}
-
-
-/* =========================
-   PRODUCT CONTENT
-========================= */
-
-.product-content {
-    padding: 20px;
 }
 
 
@@ -540,17 +518,10 @@ body {
 
 @media (max-width: 600px) {
 
-    .product-image {
-        height: 250px;
-    }
-
-    .product-content {
-        padding: 18px;
-    }
-    
     .header {
         padding: 35px 0;
     }
+
 
     .header h1 {
         font-size: 32px;
@@ -579,12 +550,7 @@ body {
     }
 
 
-    .product-image {
-        height: 250px;
-    }
-
-
-    .product-content {
+    .product-card {
         padding: 18px;
     }
 
