@@ -124,17 +124,18 @@ async function loadProducts() {
 
 function createCategoryFilter() {
 
-    const categories = [
-        ...new Set(
-            products
-                .map(product =>
-                    product.category
-                )
-                .filter(category =>
-                    category
-                )
-        )
-    ];
+    const categories =
+        [
+            ...new Set(
+                products
+                    .map(product =>
+                        product.category
+                    )
+                    .filter(category =>
+                        category
+                    )
+            )
+        ];
 
 
     categories.sort();
@@ -150,9 +151,7 @@ function createCategoryFilter() {
     categories.forEach(category => {
 
         const option =
-            document.createElement(
-                "option"
-            );
+            document.createElement("option");
 
 
         option.value =
@@ -178,17 +177,18 @@ function createCategoryFilter() {
 
 function createTimeFilter() {
 
-    const times = [
-        ...new Set(
-            products
-                .map(product =>
-                    product.time
-                )
-                .filter(time =>
-                    time
-                )
-        )
-    ];
+    const times =
+        [
+            ...new Set(
+                products
+                    .map(product =>
+                        product.time
+                    )
+                    .filter(time =>
+                        time
+                    )
+            )
+        ];
 
 
     times.sort();
@@ -204,9 +204,7 @@ function createTimeFilter() {
     times.forEach(time => {
 
         const option =
-            document.createElement(
-                "option"
-            );
+            document.createElement("option");
 
 
         option.value =
@@ -259,7 +257,7 @@ function filterProducts() {
         products.filter(product => {
 
             const matchesSearch =
-                String(product.name)
+                product.name
                     .toLowerCase()
                     .includes(keyword);
 
@@ -302,6 +300,7 @@ function renderProducts(data) {
 
     productContainer.innerHTML = "";
 
+
     productCount.textContent =
         data.length;
 
@@ -342,9 +341,7 @@ function renderProducts(data) {
 function createProductCard(product) {
 
     const card =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
 
 
     card.className =
@@ -370,153 +367,65 @@ function createProductCard(product) {
         );
 
 
-    const imageURL =
-        safeImageURL(
-            product.image
-        );
-
-
     card.innerHTML = `
 
-        <img
-            class="product-image"
-            src="${imageURL}"
-            alt="${escapeHTML(product.name)}"
-            loading="lazy"
-        >
+        <div class="product-name">
+            ${escapeHTML(product.name)}
+        </div>
 
 
-        <div class="product-content">
+        <div class="product-meta">
 
-            <div class="product-name">
-                ${escapeHTML(product.name)}
+            <span class="badge">
+                ${escapeHTML(product.category)}
+            </span>
+
+
+            <span class="badge badge-time">
+                🕐 ${escapeHTML(product.time)}
+            </span>
+
+        </div>
+
+
+        <div class="price-area">
+
+            <div class="old-price">
+                ${oldPrice}
             </div>
 
 
-            <div class="product-meta">
-
-                <span class="badge">
-                    ${escapeHTML(product.category)}
-                </span>
-
-
-                <span class="badge badge-time">
-                    🕐 ${escapeHTML(product.time)}
-                </span>
-
+            <div class="new-price">
+                ${newPrice}
             </div>
 
 
-            <div class="price-area">
-
-                <div class="old-price">
-                    ${oldPrice}
-                </div>
-
-
-                <div class="new-price">
-                    ${newPrice}
-                </div>
-
-
-                ${
-                    discount > 0
-                    ? `
-                        <span class="discount">
-                            Turun ${discount}%
-                        </span>
-                    `
-                    : ""
-                }
+            ${
+                discount > 0
+                ? `
+                    <span class="discount">
+                        Turun ${discount}%
+                    </span>
+                `
+                : ""
+            }
 
 
-                <a
-                    class="buy-button"
-                    href="${safeURL(product.shopee)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Click Link Product
-                </a>
-
-            </div>
+            <a
+                class="buy-button"
+                href="${safeURL(product.shopee)}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Click Link Product
+            </a>
 
         </div>
 
     `;
 
 
-    // ==================================
-    // IMAGE ERROR
-    // ==================================
-
-    const image =
-        card.querySelector(
-            ".product-image"
-        );
-
-
-    image.addEventListener(
-        "error",
-        function () {
-
-            this.src =
-                "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image";
-
-        },
-        {
-            once: true
-        }
-    );
-
-
     return card;
-
-}
-
-
-// ==========================================
-// SAFE IMAGE URL
-// ==========================================
-
-function safeImageURL(url) {
-
-    if (!url) {
-
-        return (
-            "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image"
-        );
-
-    }
-
-
-    try {
-
-        const parsed =
-            new URL(url);
-
-
-        if (
-            parsed.protocol === "https:" ||
-            parsed.protocol === "http:"
-        ) {
-
-            return parsed.href;
-
-        }
-
-
-        return (
-            "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image"
-        );
-
-    } catch {
-
-        return (
-            "https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image"
-        );
-
-    }
 
 }
 
@@ -579,30 +488,15 @@ function escapeHTML(value) {
 
     return String(value)
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
+        .replace(/&/g, "&amp;")
 
-        .replace(
-            /</g,
-            "&lt;"
-        )
+        .replace(/</g, "&lt;")
 
-        .replace(
-            />/g,
-            "&gt;"
-        )
+        .replace(/>/g, "&gt;")
 
-        .replace(
-            /"/g,
-            "&quot;"
-        )
+        .replace(/"/g, "&quot;")
 
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/'/g, "&#039;");
 
 }
 
