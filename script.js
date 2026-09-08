@@ -1,51 +1,9 @@
-// ==========================================
-// GOOGLE APPS SCRIPT API
-// ==========================================
-
 const API_URL =
     "https://script.google.com/macros/s/AKfycbzZftAsnQmS6El2y4YAr0_4-ZzuflJP743luDtb6zTMEN9MLBhmROpPbD-53YtPdcAZ/exec";
 
 
-// ==========================================
-// GLOBAL DATA
-// ==========================================
-
-let products = [];
-
-
-// ==========================================
-// ELEMENT
-// ==========================================
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const categoryFilter =
-    document.getElementById("categoryFilter");
-
-const timeFilter =
-    document.getElementById("timeFilter");
-
-const minPrice =
-    document.getElementById("minPrice");
-
-const maxPrice =
-    document.getElementById("maxPrice");
-
-const resetFilter =
-    document.getElementById("resetFilter");
-
-const productContainer =
-    document.getElementById("productContainer");
-
-const productCount =
-    document.getElementById("productCount");
-
-const emptyState =
-    document.getElementById("emptyState");
-
-const loadingText =
-    document.getElementById("loadingText");
+let allProducts = [];
+let filteredProducts = [];
 
 
 // ==========================================
@@ -54,67 +12,67 @@ const loadingText =
 
 async function loadProducts() {
 
+    const loadingText =
+        document.getElementById("loadingText");
+
     try {
 
         loadingText.textContent =
             "Memuat produk...";
 
-
         const response =
             await fetch(API_URL);
-
 
         if (!response.ok) {
 
             throw new Error(
                 "Gagal mengambil data."
             );
-
         }
 
-
-        const data =
+        const result =
             await response.json();
 
-
-        if (!data.success) {
+        if (!result.success) {
 
             throw new Error(
-                data.message ||
-                "Terjadi kesalahan."
+                result.message ||
+                "Data produk gagal dimuat."
             );
-
         }
 
+        allProducts =
+            Array.isArray(result.products)
+                ? result.products
+                : [];
 
-        products =
-            data.products || [];
-
-
-        loadingText.textContent = "";
+        filteredProducts =
+            [...allProducts];
 
 
         createCategoryFilter();
-
         createTimeFilter();
 
-        renderProducts(products);
+        renderProducts();
 
+        loadingText.textContent =
+            "Data berhasil dimuat.";
 
     } catch (error) {
 
-        console.error(error);
-
+        console.error(
+            "Error:",
+            error
+        );
 
         loadingText.textContent =
-            "Gagal memuat data produk.";
+            "Gagal memuat produk.";
 
-        productContainer.innerHTML = "";
+        allProducts = [];
+        filteredProducts = [];
 
-        productCount.textContent = "0";
-
+        renderProducts();
     }
-
 }
 
 
@@ -124,50 +82,44 @@ async function loadProducts() {
 
 function createCategoryFilter() {
 
+    const filter =
+        document.getElementById(
+            "categoryFilter"
+        );
+
     const categories =
         [
             ...new Set(
-                products
+                allProducts
                     .map(product =>
                         product.category
                     )
-                    .filter(category =>
-                        category
-                    )
+                    .filter(Boolean)
             )
-        ];
+        ].sort();
 
 
-    categories.sort();
-
-
-    categoryFilter.innerHTML = `
+    filter.innerHTML =
+        `
         <option value="all">
             Semua kategori
         </option>
-    `;
+        `;
 
 
     categories.forEach(category => {
 
         const option =
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
+        option.value = category;
 
-        option.value =
-            category;
+        option.textContent = category;
 
-
-        option.textContent =
-            category;
-
-
-        categoryFilter.appendChild(
-            option
-        );
-
+        filter.appendChild(option);
     });
-
 }
 
 
@@ -177,50 +129,44 @@ function createCategoryFilter() {
 
 function createTimeFilter() {
 
+    const filter =
+        document.getElementById(
+            "timeFilter"
+        );
+
     const times =
         [
             ...new Set(
-                products
+                allProducts
                     .map(product =>
                         product.time
                     )
-                    .filter(time =>
-                        time
-                    )
+                    .filter(Boolean)
             )
-        ];
+        ].sort();
 
 
-    times.sort();
-
-
-    timeFilter.innerHTML = `
+    filter.innerHTML =
+        `
         <option value="all">
             Semua jam
         </option>
-    `;
+        `;
 
 
     times.forEach(time => {
 
         const option =
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
+        option.value = time;
 
-        option.value =
-            time;
+        option.textContent = time;
 
-
-        option.textContent =
-            time;
-
-
-        timeFilter.appendChild(
-            option
-        );
-
+        filter.appendChild(option);
     });
-
 }
 
 
@@ -228,67 +174,98 @@ function createTimeFilter() {
 // FILTER PRODUCTS
 // ==========================================
 
-function filterProducts() {
+function applyFilters() {
 
-    const keyword =
-        searchInput.value
+    const search =
+        document
+            .getElementById("searchInput")
+            .value
             .toLowerCase()
             .trim();
 
 
     const category =
-        categoryFilter.value;
+        document
+            .getElementById("categoryFilter")
+            .value;
 
 
     const time =
-        timeFilter.value;
+        document
+            .getElementById("timeFilter")
+            .value;
 
 
-    const minimum =
-        Number(minPrice.value) || 0;
+    const minPrice =
+        Number(
+            document
+                .getElementById("minPrice")
+                .value
+        ) || 0;
 
 
-    const maximum =
-        Number(maxPrice.value) ||
-        Infinity;
+    const maxPriceValue =
+        document
+            .getElementById("maxPrice")
+            .value;
 
 
-    const filtered =
-        products.filter(product => {
-
-            const matchesSearch =
-                product.name
-                    .toLowerCase()
-                    .includes(keyword);
+    const maxPrice =
+        maxPriceValue === ""
+            ? Infinity
+            : Number(maxPriceValue);
 
 
-            const matchesCategory =
+    filteredProducts =
+        allProducts.filter(product => {
+
+            const productName =
+                String(
+                    product.name || ""
+                ).toLowerCase();
+
+
+            const matchSearch =
+                productName.includes(
+                    search
+                );
+
+
+            const matchCategory =
                 category === "all" ||
                 product.category === category;
 
 
-            const matchesTime =
+            const matchTime =
                 time === "all" ||
                 product.time === time;
 
 
-            const matchesPrice =
-                product.newPrice >= minimum &&
-                product.newPrice <= maximum;
+            const price =
+                Number(
+                    product.newPrice
+                ) || 0;
+
+
+            const matchMinPrice =
+                price >= minPrice;
+
+
+            const matchMaxPrice =
+                price <= maxPrice;
 
 
             return (
-                matchesSearch &&
-                matchesCategory &&
-                matchesTime &&
-                matchesPrice
+                matchSearch &&
+                matchCategory &&
+                matchTime &&
+                matchMinPrice &&
+                matchMaxPrice
             );
-
         });
 
 
-    renderProducts(filtered);
-
+    renderProducts();
 }
 
 
@@ -296,22 +273,41 @@ function filterProducts() {
 // RENDER PRODUCTS
 // ==========================================
 
-function renderProducts(data) {
+function renderProducts() {
 
-    productContainer.innerHTML = "";
+    const container =
+        document.getElementById(
+            "productContainer"
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            "emptyState"
+        );
+
+
+    const productCount =
+        document.getElementById(
+            "productCount"
+        );
+
+
+    container.innerHTML = "";
 
 
     productCount.textContent =
-        data.length;
+        filteredProducts.length;
 
 
-    if (data.length === 0) {
+    if (
+        filteredProducts.length === 0
+    ) {
 
         emptyState.style.display =
             "block";
 
         return;
-
     }
 
 
@@ -319,18 +315,17 @@ function renderProducts(data) {
         "none";
 
 
-    data.forEach(product => {
+    filteredProducts.forEach(
+        product => {
 
-        const card =
-            createProductCard(product);
+            const card =
+                createProductCard(
+                    product
+                );
 
-
-        productContainer.appendChild(
-            card
-        );
-
-    });
-
+            container.appendChild(card);
+        }
+    );
 }
 
 
@@ -341,92 +336,257 @@ function renderProducts(data) {
 function createProductCard(product) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
 
 
     card.className =
         "product-card";
 
 
-    const discount =
-        calculateDiscount(
-            product.oldPrice,
-            product.newPrice
+    const name =
+        escapeHTML(
+            product.name || "-"
+        );
+
+
+    const category =
+        escapeHTML(
+            product.category || "-"
+        );
+
+
+    const time =
+        escapeHTML(
+            product.time || "-"
         );
 
 
     const oldPrice =
-        formatRupiah(
+        Number(
             product.oldPrice
-        );
+        ) || 0;
 
 
     const newPrice =
-        formatRupiah(
+        Number(
             product.newPrice
+        ) || 0;
+
+
+    const discount =
+        calculateDiscount(
+            oldPrice,
+            newPrice
         );
 
 
-    card.innerHTML = `
-
-        <div class="product-name">
-            ${escapeHTML(product.name)}
-        </div>
-
-
-        <div class="product-meta">
-
-            <span class="badge">
-                ${escapeHTML(product.category)}
-            </span>
+    const shopeeURL =
+        safeURL(
+            product.shopee
+        );
 
 
-            <span class="badge badge-time">
-                🕐 ${escapeHTML(product.time)}
-            </span>
+    const imageURL =
+        convertDriveImageURL(
+            product.image
+        );
 
-        </div>
+
+    // ======================================
+    // IMAGE
+    // ======================================
+
+    let imageHTML = "";
 
 
-        <div class="price-area">
+    if (imageURL) {
 
-            <div class="old-price">
-                ${oldPrice}
+        imageHTML =
+            `
+            <div class="product-image-wrapper">
+
+                <img
+                    class="product-image"
+                    src="${escapeAttribute(imageURL)}"
+                    alt="${escapeAttribute(name)}"
+                    loading="lazy"
+                    onerror="this.parentElement.innerHTML='<div class=&quot;product-image-placeholder&quot;>Foto tidak tersedia</div>'"
+                >
+
+            </div>
+            `;
+
+    } else {
+
+        imageHTML =
+            `
+            <div class="product-image-wrapper">
+
+                <div class="product-image-placeholder">
+                    Foto tidak tersedia
+                </div>
+
+            </div>
+            `;
+    }
+
+
+    // ======================================
+    // CARD
+    // ======================================
+
+    card.innerHTML =
+        `
+        ${imageHTML}
+
+        <div class="product-content">
+
+            <div class="product-name">
+                ${name}
             </div>
 
 
-            <div class="new-price">
-                ${newPrice}
+            <div class="product-meta">
+
+                <span class="product-badge">
+                    ${category}
+                </span>
+
+                <span class="product-badge">
+                    ${time}
+                </span>
+
+            </div>
+
+
+            <div class="price-section">
+
+                <div class="old-price">
+                    ${formatRupiah(oldPrice)}
+                </div>
+
+                <div class="new-price">
+                    ${formatRupiah(newPrice)}
+                </div>
+
+                ${
+                    discount > 0
+                        ? `
+                        <span class="discount">
+                            Hemat ${discount}%
+                        </span>
+                        `
+                        : ""
+                }
+
             </div>
 
 
             ${
-                discount > 0
-                ? `
-                    <span class="discount">
-                        Turun ${discount}%
-                    </span>
-                `
-                : ""
+                shopeeURL
+                    ? `
+                    <a
+                        href="${shopeeURL}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="buy-button"
+                    >
+                        Click Link
+                    </a>
+                    `
+                    : `
+                    <div class="buy-button">
+                        Link tidak tersedia
+                    </div>
+                    `
             }
 
-
-            <a
-                class="buy-button"
-                href="${safeURL(product.shopee)}"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Click Link Product
-            </a>
-
         </div>
-
-    `;
+        `;
 
 
     return card;
+}
 
+
+// ==========================================
+// GOOGLE DRIVE IMAGE URL
+// ==========================================
+
+function convertDriveImageURL(url) {
+
+    if (!url) {
+        return "";
+    }
+
+
+    url =
+        String(url).trim();
+
+
+    // --------------------------------------
+    // Kalau sudah format direct image
+    // --------------------------------------
+
+    if (
+        url.includes(
+            "drive.google.com/uc"
+        )
+    ) {
+
+        return url;
+    }
+
+
+    // --------------------------------------
+    // Format:
+    // drive.google.com/file/d/FILE_ID/view
+    // --------------------------------------
+
+    let match =
+        url.match(
+            /drive\.google\.com\/file\/d\/([^/]+)/
+        );
+
+
+    if (match) {
+
+        const fileId =
+            match[1];
+
+        return (
+            "https://drive.google.com/uc?export=view&id=" +
+            encodeURIComponent(fileId)
+        );
+    }
+
+
+    // --------------------------------------
+    // Format:
+    // open?id=FILE_ID
+    // --------------------------------------
+
+    match =
+        url.match(
+            /[?&]id=([^&]+)/
+        );
+
+
+    if (match) {
+
+        const fileId =
+            match[1];
+
+        return (
+            "https://drive.google.com/uc?export=view&id=" +
+            encodeURIComponent(fileId)
+        );
+    }
+
+
+    return url;
 }
 
 
@@ -441,42 +601,41 @@ function calculateDiscount(
 
     if (
         !oldPrice ||
-        oldPrice <= 0 ||
-        newPrice >= oldPrice
+        !newPrice ||
+        oldPrice <= newPrice
     ) {
 
         return 0;
-
     }
 
 
-    const result =
+    return Math.round(
         (
             (oldPrice - newPrice) /
             oldPrice
-        ) * 100;
-
-
-    return Math.round(result);
-
+        ) * 100
+    );
 }
 
 
 // ==========================================
-// RUPIAH FORMAT
+// FORMAT RUPIAH
 // ==========================================
 
 function formatRupiah(value) {
+
+    const number =
+        Number(value) || 0;
+
 
     return new Intl.NumberFormat(
         "id-ID",
         {
             style: "currency",
             currency: "IDR",
-            maximumFractionDigits: 0
+            minimumFractionDigits: 0
         }
-    ).format(value);
-
+    ).format(number);
 }
 
 
@@ -487,17 +646,36 @@ function formatRupiah(value) {
 function escapeHTML(value) {
 
     return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
 
-        .replace(/&/g, "&amp;")
 
-        .replace(/</g, "&lt;")
+// ==========================================
+// ESCAPE ATTRIBUTE
+// ==========================================
 
-        .replace(/>/g, "&gt;")
+function escapeAttribute(value) {
 
-        .replace(/"/g, "&quot;")
-
-        .replace(/'/g, "&#039;");
-
+    return escapeHTML(value);
 }
 
 
@@ -507,6 +685,11 @@ function escapeHTML(value) {
 
 function safeURL(url) {
 
+    if (!url) {
+        return "";
+    }
+
+
     try {
 
         const parsed =
@@ -514,23 +697,20 @@ function safeURL(url) {
 
 
         if (
-            parsed.protocol === "https:" ||
-            parsed.protocol === "http:"
+            parsed.protocol === "http:" ||
+            parsed.protocol === "https:"
         ) {
 
             return parsed.href;
-
         }
 
+    } catch (error) {
 
-        return "#";
-
-    } catch {
-
-        return "#";
-
+        return "";
     }
 
+
+    return "";
 }
 
 
@@ -538,59 +718,90 @@ function safeURL(url) {
 // EVENT LISTENERS
 // ==========================================
 
-searchInput.addEventListener(
-    "input",
-    filterProducts
-);
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "input",
+        applyFilters
+    );
 
 
-categoryFilter.addEventListener(
-    "change",
-    filterProducts
-);
+document
+    .getElementById("categoryFilter")
+    .addEventListener(
+        "change",
+        applyFilters
+    );
 
 
-timeFilter.addEventListener(
-    "change",
-    filterProducts
-);
+document
+    .getElementById("timeFilter")
+    .addEventListener(
+        "change",
+        applyFilters
+    );
 
 
-minPrice.addEventListener(
-    "input",
-    filterProducts
-);
+document
+    .getElementById("minPrice")
+    .addEventListener(
+        "input",
+        applyFilters
+    );
 
 
-maxPrice.addEventListener(
-    "input",
-    filterProducts
-);
+document
+    .getElementById("maxPrice")
+    .addEventListener(
+        "input",
+        applyFilters
+    );
 
 
-// ==========================================
-// RESET FILTER
-// ==========================================
+document
+    .getElementById("resetFilter")
+    .addEventListener(
+        "click",
+        () => {
 
-resetFilter.addEventListener(
-    "click",
-    () => {
-
-        searchInput.value = "";
-
-        categoryFilter.value = "all";
-
-        timeFilter.value = "all";
-
-        minPrice.value = "";
-
-        maxPrice.value = "";
+            document
+                .getElementById(
+                    "searchInput"
+                )
+                .value = "";
 
 
-        renderProducts(products);
+            document
+                .getElementById(
+                    "categoryFilter"
+                )
+                .value = "all";
 
-    }
-);
+
+            document
+                .getElementById(
+                    "timeFilter"
+                )
+                .value = "all";
+
+
+            document
+                .getElementById(
+                    "minPrice"
+                )
+                .value = "";
+
+
+            document
+                .getElementById(
+                    "maxPrice"
+                )
+                .value = "";
+
+
+            applyFilters();
+        }
+    );
 
 
 // ==========================================
