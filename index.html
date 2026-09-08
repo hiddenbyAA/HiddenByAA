@@ -1,62 +1,26 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hidden by AA</title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-    <!-- HEADER -->
-
     <header class="header">
-
         <div class="container">
-
-            <h1>
-                Hidden by AA
-            </h1>
-
-            <p>
-                Temukan barang yang diam-diam turun harga 🔥
-            </p>
-
+            <h1>Hidden by AA</h1>
+            <p>Temukan barang yang diam-diam turun harga 🔥</p>
         </div>
-
     </header>
-
-
-
-    <!-- MAIN -->
 
     <main class="container">
 
-
-        <!-- SEARCH -->
-
         <section class="search-section">
-
             <div class="search-box">
-
-                <span class="search-icon">
-                    🔎
-                </span>
+                <span class="search-icon">🔎</span>
 
                 <input
                     type="text"
@@ -64,56 +28,35 @@
                     placeholder="Cari nama barang..."
                     autocomplete="off"
                 >
-
             </div>
-
         </section>
 
 
-
-        <!-- FILTER -->
-
         <section class="filter-section">
 
-
             <div class="filter-item">
-
-                <label for="categoryFilter">
-                    Kategori
-                </label>
+                <label for="categoryFilter">Kategori</label>
 
                 <select id="categoryFilter">
-
                     <option value="all">
                         Semua kategori
                     </option>
-
                 </select>
-
             </div>
 
 
-
             <div class="filter-item">
-
-                <label for="timeFilter">
-                    Jam Turun
-                </label>
+                <label for="timeFilter">Jam Turun</label>
 
                 <select id="timeFilter">
-
                     <option value="all">
                         Semua jam
                     </option>
-
                 </select>
-
             </div>
 
 
-
             <div class="filter-item">
-
                 <label for="minPrice">
                     Harga Minimum
                 </label>
@@ -124,13 +67,10 @@
                     placeholder="Rp 0"
                     min="0"
                 >
-
             </div>
 
 
-
             <div class="filter-item">
-
                 <label for="maxPrice">
                     Harga Maksimum
                 </label>
@@ -141,9 +81,7 @@
                     placeholder="Rp 10.000.000"
                     min="0"
                 >
-
             </div>
-
 
 
             <button
@@ -156,21 +94,12 @@
         </section>
 
 
-
-        <!-- RESULT INFO -->
-
         <section class="result-info">
 
             <span>
-
-                <strong id="productCount">
-                    0
-                </strong>
-
+                <strong id="productCount">0</strong>
                 produk ditemukan
-
             </span>
-
 
             <span id="loadingText">
                 Memuat produk...
@@ -179,18 +108,11 @@
         </section>
 
 
-
-        <!-- PRODUCT -->
-
         <section
             id="productContainer"
             class="product-grid"
-        >
-        </section>
+        ></section>
 
-
-
-        <!-- EMPTY STATE -->
 
         <section
             id="emptyState"
@@ -214,9 +136,6 @@
     </main>
 
 
-
-    <!-- FOOTER -->
-
     <footer class="footer">
 
         <p>
@@ -230,9 +149,7 @@
     </footer>
 
 
-
     <script src="script.js"></script>
 
 </body>
-
 </html>
